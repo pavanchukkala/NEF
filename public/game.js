@@ -125,17 +125,18 @@ const G = {
 // ═══════════════════════════════════════════════════════════════
 // 2. FIREBASE CONFIG — Replace with YOUR Firebase config
 // ═══════════════════════════════════════════════════════════════
+// src/game.js
 const FB_CONFIG = {
- apiKey: "AIzaSyCpfn31zD0CVddegKkzfhl1a8Kx8ioRFW4",
+  apiKey: "AIzaSyCpfn31zD0CVddegKkzfhl1a8Kx8ioRFW4",
   authDomain: "voltagee-accf1.firebaseapp.com",
   databaseURL: "https://voltagee-accf1-default-rtdb.firebaseio.com",
   projectId: "voltagee-accf1",
   storageBucket: "voltagee-accf1.firebasestorage.app",
   messagingSenderId: "933548432641",
   appId: "1:933548432641:web:24aa604fccaa3d32218f00",
-  measurementId: "G-V37VQYY6NQ"
+  measurementId: "G-V37VQYY6NQ" // optional — you can leave this out if unused
 };
-  
+
 // ═══════════════════════════════════════════════════════════════
 // 3. STATE
 // ═══════════════════════════════════════════════════════════════
