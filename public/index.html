@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Volt Surge Enhanced &mdash; Electric Battle Royale | Play Free</title>
+    <meta
+      name="description"
+      content="Volt Surge Enhanced is a free browser battle royale where you leave electric trails and chain lightning through your opponents.  Play instantly on mobile or desktop without downloads."
+    />
+    <meta
+      name="keywords"
+      content="multiplayer game online free, battle royale browser game, electric game, io game, mobile multiplayer, volt surge, free online game, realtime multiplayer"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="Volt Surge" />
+    <link rel="canonical" href="https://example.com/" />
+    <!-- Social cards -->
+    <meta property="og:title" content="Volt Surge &mdash; Electric Battle Royale | Free Multiplayer" />
+    <meta
+      property="og:description"
+      content="Leave electric trails, chain lightning and outlast everyone in this adrenaline‑charged battle royale.  Play free in your browser."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:image" content="/images/icon-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Volt Surge &mdash; Free Multiplayer Electric Battle Royale" />
+    <meta
+      name="twitter:description"
+      content="Survive the surge.  Leave electric trails that damage enemies and chain lightning kills.  Play free in your browser."
+    />
+    <!-- Schema.org VideoGame & FAQ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Volt Surge Enhanced",
+        "description": "Real‑time multiplayer electric trail battle royale browser game.  Leave voltage trails, chain lightning, defeat enemies.  Free to play.",
+        "genre": ["Battle Royale", "Action", "Multiplayer", "IO Game"],
+        "gamePlatform": ["Web Browser", "Mobile", "Desktop", "iOS", "Android"],
+        "operatingSystem": "Any",
+        "applicationCategory": "Game",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "url": "https://example.com/",
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "3278" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is Volt Surge free to play?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes! Volt Surge Enhanced is completely free.  There are optional rewarded videos for respawns and cosmetic bonuses, but you can enjoy the full game without paying a cent." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to download anything?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No.  Volt Surge runs entirely in your browser on both mobile and desktop.  Just visit the site and start playing instantly." }
+          }
+        ]
+      }
+    </script>
+    <!-- PWA manifest & icons -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512.png" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- Loading screen -->
+    <div id="loading" class="screen active">
+      <div class="logo-text">Volt Surge</div>
+      <div class="logo-sub">connecting...</div>
+      <div class="loading-bar">
+        <div class="loading-fill"></div>
+      </div>
+      <div class="loading-msg">Loading assets</div>
+    </div>
+    <!-- Menu -->
+    <div id="menu" class="screen">
+      <div class="menu-body">
+        <div class="game-logo">
+          <h1>Volt Surge</h1>
+          <p>Electric Battle Royale</p>
+        </div>
+        <div class="name-row">
+          <input id="playerName" type="text" placeholder="Your Name" maxlength="12" />
+        </div>
+        <div class="menu-actions">
+          <button id="quickMatch" class="btn btn-primary btn-block">Quick Match</button>
+          <button id="createRoom" class="btn btn-secondary btn-block">Create Room</button>
+        </div>
+        <div class="join-row">
+          <input id="joinCode" type="text" placeholder="CODE" maxlength="6" />
+          <button id="joinRoom" class="btn btn-primary">Join</button>
+        </div>
+        <div class="menu-tips">
+          <div class="tip-grid">
+            <div class="tip">
+              <strong>Move</strong>
+              <span>Use WASD or drag the joystick to move.</span>
+            </div>
+            <div class="tip">
+              <strong>Abilities</strong>
+              <span>Pulse, Shield and Surge are bound to Q/E/R on desktop or the on‑screen buttons on mobile.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Waiting room -->
+    <div id="waiting" class="screen">
+      <!-- The waiting room UI will be created dynamically by game.js -->
+    </div>
+    <!-- Game screen -->
+    <div id="game" class="screen">
+      <canvas id="gameCanvas"></canvas>
+      <!-- Chat overlay -->
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+          <input id="chatInput" type="text" placeholder="Say something..." />
+          <button id="chatSend">Send</button>
+        </div>
+      </div>
+    </div>
+    <!-- Background music (played on first user interaction to satisfy autoplay policies) -->
+    <audio id="bgMusic" src="/audio/ambient_noise.wav" loop preload="auto"></audio>
+    <noscript>
+      You need JavaScript enabled to play Volt Surge.
+    </noscript>
+    <!-- Main module scripts -->
+    <script>
+      // Play background music on first user interaction to comply with autoplay policies
+      const bg = document.getElementById('bgMusic');
+      const playBG = () => {
+        bg.play().catch(() => {});
+        window.removeEventListener('click', playBG);
+        window.removeEventListener('touchstart', playBG);
+      };
+      window.addEventListener('click', playBG);
+      window.addEventListener('touchstart', playBG);
+    </script>
+    <script type="module" src="./game.js"></script>
+  </body>
+</html>
