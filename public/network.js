@@ -1,108 +1,117 @@
-/*
-  network.js
+// public/network.js — compat / global-firebase wrapper
+// Assumes firebase-app-compat.js, firebase-database-compat.js, firebase-auth-compat.js
+// are loaded in index.html before this module executes.
 
-  Firebase and networking abstraction layer for Volt Surge.
-
-  This module wraps Firebase initialisation, lobby creation/joining,
-  realtime state updates and chat/voice signalling.  To keep costs
-  zero, it uses Firebase's free Spark plan with anonymous
-  authentication.  Replace the placeholder config below with your
-  project's values from the Firebase console.
-
-  All public functions return promises and are designed to be
-  awaitable.  Event listeners accept callbacks that will be invoked
-  whenever data changes on the server.
-*/
-
-// Import the Firebase compat SDKs from CDN.  Using the compat layer
-// keeps the API close to v8 and does not require a build step.
 let app;
 let db;
 let auth;
 let uid;
 
+/**
+ * Initialize Firebase using the global `firebase` compat object.
+ * Call once from game bootstrap.
+ * @param {Object} config - Firebase config object (FB_CONFIG)
+ */
 export async function initFirebase(config) {
-  if (app) return; // prevent multiple initialisations
-  app = initializeApp(config);
-  db = getDatabase(app);
-  auth = getAuth(app);
-  const cred = await signInAnonymously(auth);
-  uid = cred.user.uid;
+  if (app) return { app, db, auth, uid };
+
+  if (typeof firebase === 'undefined') {
+    throw new Error('Global `firebase` is not available. Ensure compat SDK script tags are loaded in index.html before game.js');
+  }
+
+  app = firebase.initializeApp(config);
+  db = firebase.database();
+  auth = firebase.auth();
+
+  // sign in anonymously (idempotent if already signed in)
+  if (!auth.currentUser) {
+    const cred = await auth.signInAnonymously();
+    uid = cred.user.uid;
+  } else {
+    uid = auth.currentUser.uid;
+  }
+
+  return { app, db, auth, uid };
 }
 
 export function getUid() {
-  return uid;
+  return uid || (auth && auth.currentUser && auth.currentUser.uid) || null;
 }
 
-// Lobby operations
+/* ---------- Lobby / player functions ---------- */
+
 export async function createLobby(name) {
-  // Generate a random 6‑letter room code
+  if (!db) throw new Error('Firebase not initialized');
   const code = Math.random().toString(36).substr(2, 6).toUpperCase();
-  await set(ref(db, `lobbies/${code}`), {
-    host: uid,
+  await db.ref(`lobbies/${code}`).set({
+    host: getUid(),
     name,
-    created: Date.now(),
+    created: firebase.database.ServerValue.TIMESTAMP,
     players: {}
   });
   return code;
 }
 
 export async function joinLobby(code, playerName) {
-  const lobbyRef = ref(db, `lobbies/${code}`);
-  const snap = await get(lobbyRef);
+  if (!db) throw new Error('Firebase not initialized');
+  const snap = await db.ref(`lobbies/${code}`).once('value');
   if (!snap.exists()) throw new Error('Lobby does not exist');
-  // Register player under players list
-  const playerRef = ref(db, `lobbies/${code}/players/${uid}`);
-  await set(playerRef, {
+  await db.ref(`lobbies/${code}/players/${getUid()}`).set({
     name: playerName,
-    joined: Date.now()
+    joined: firebase.database.ServerValue.TIMESTAMP
   });
   return code;
 }
 
 export function onLobbyPlayers(code, callback) {
-  const playersRef = ref(db, `lobbies/${code}/players`);
-  return onValue(playersRef, snap => {
-    const val = snap.val() || {};
-    callback(val);
-  });
+  if (!db) throw new Error('Firebase not initialized');
+  const ref = db.ref(`lobbies/${code}/players`);
+  const handler = ref.on('value', s => callback(s.val() || {}));
+  return () => ref.off('value', handler);
 }
 
-// Remove player on disconnect
 export function leaveLobby(code) {
-  const playerRef = ref(db, `lobbies/${code}/players/${uid}`);
-  remove(playerRef);
+  if (!db) throw new Error('Firebase not initialized');
+  return db.ref(`lobbies/${code}/players/${getUid()}`).remove();
 }
 
-// Game state operations
+/* ---------- Game state / sync ---------- */
+
 export function sendState(code, state) {
-  const stateRef = ref(db, `lobbies/${code}/state/${uid}`);
-  return set(stateRef, state);
+  if (!db) throw new Error('Firebase not initialized');
+  return db.ref(`lobbies/${code}/state/${getUid()}`).set({
+    state,
+    ts: firebase.database.ServerValue.TIMESTAMP
+  });
 }
 
 export function onStateUpdates(code, callback) {
-  const stateRef = ref(db, `lobbies/${code}/state`);
-  return onValue(stateRef, snap => {
-    const states = snap.val() || {};
-    callback(states);
-  });
+  if (!db) throw new Error('Firebase not initialized');
+  const ref = db.ref(`lobbies/${code}/state`);
+  const handler = ref.on('value', s => callback(s.val() || {}));
+  return () => ref.off('value', handler);
 }
 
-// Chat operations
+/* ---------- Chat ---------- */
+
 export function sendChatMessage(code, text) {
-  const msgRef = ref(db, `lobbies/${code}/chat`);
-  const id = push(child(msgRef, '/')).key;
-  return set(ref(db, `lobbies/${code}/chat/${id}`), {
-    uid,
+  if (!db) throw new Error('Firebase not initialized');
+  const ref = db.ref(`lobbies/${code}/chat`);
+  const newRef = ref.push();
+  return newRef.set({
+    uid: getUid(),
     text,
-    timestamp: Date.now()
+    timestamp: firebase.database.ServerValue.TIMESTAMP
   });
 }
 
 export function onChat(code, callback) {
-  const msgRef = ref(db, `lobbies/${code}/chat`);
-  return onValue(msgRef, snap => {
-    const msgs = snap.val() || {};
-    callback(Object.values(msgs));
+  if (!db) throw new Error('Firebase not initialized');
+  const ref = db.ref(`lobbies/${code}/chat`);
+  const handler = ref.on('value', s => {
+    const val = s.val() || {};
+    // convert keyed object to array sorted by key (push id order)
+    callback(Object.values(val));
   });
+  return () => ref.off('value', handler);
 }
