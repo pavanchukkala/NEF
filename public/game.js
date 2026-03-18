@@ -126,13 +126,14 @@ const G = {
 // 2. FIREBASE CONFIG — Replace with YOUR Firebase config
 // ═══════════════════════════════════════════════════════════════
 const FB_CONFIG = {
-  apiKey: "AIzaSyCnT1WR4U6zqlYpwgDax0PT6c8DalPVm1Y",
+ apiKey: "AIzaSyCnT1WR4U6zqlYpwgDax0PT6c8DalPVm1Y",
   authDomain: "volt-surge.firebaseapp.com",
   databaseURL: "https://volt-surge-default-rtdb.firebaseio.com",
   projectId: "volt-surge",
   storageBucket: "volt-surge.firebasestorage.app",
   messagingSenderId: "162991950538",
-  appId: "1:162991950538:web:178a3f0c04349e3e9b8233"
+  appId: "1:162991950538:web:178a3f0c04349e3e9b8233",
+  measurementId: "G-QQ8R0WJGB2"
 };
   
 // ═══════════════════════════════════════════════════════════════
