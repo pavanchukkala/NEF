@@ -16,16 +16,6 @@
 
 // Import the Firebase compat SDKs from CDN.  Using the compat layer
 // keeps the API close to v8 and does not require a build step.
-import {
-  initializeApp
-} from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
-import {
-  getDatabase, ref, set, onValue, remove, update, push, child, get
-} from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js';
-import {
-  getAuth, signInAnonymously
-} from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js';
-
 let app;
 let db;
 let auth;
