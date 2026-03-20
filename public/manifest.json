@@ -1,12 +1,10 @@
 {
-  "name": "Volt Surge Enhanced",
-  "short_name": "VoltSurge",
-  "description": "Electric trail battle royale — enhanced edition with rich UI, chat and bots.",
-  "start_url": "/index.html",
-  "display": "fullscreen",
-  "orientation": "landscape",
-  "background_color": "#000510",
-  "theme_color": "#00ffff",
+  "name": "NEF Game",
+  "short_name": "NEF",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f14",
+  "theme_color": "#0b0f14",
   "icons": [
     {
       "src": "/images/icon-192.png",
