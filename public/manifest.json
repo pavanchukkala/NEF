@@ -1,0 +1,22 @@
+{
+  "name": "Volt Surge Enhanced",
+  "short_name": "VoltSurge",
+  "description": "Electric trail battle royale — enhanced edition with rich UI, chat and bots.",
+  "start_url": "/index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000510",
+  "theme_color": "#00ffff",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

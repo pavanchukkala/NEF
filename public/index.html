@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volt Surge</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00ffff" />
+  <style>
+    /* minimal layout so elements exist and are hidden until used */
+    html,body { height:100%; margin:0; background:#000; color:#fff; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; }
+    #game-canvas, #minimap-canvas { position:fixed; top:0; left:0; width:100%; height:100%; display:block; }
+    #hud, #mobile-controls, #s-waiting, #s-menu, #s-game, #s-results { display:none; }
+    .btn { cursor:pointer; padding:8px 12px; background:#111;border:1px solid #0ff;color:#0ff;border-radius:4px; }
+    #player-slots-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Loading / Landing -->
+  <div id="s-menu">
+    <h1>Volt Surge</h1>
+    <p>Electric Battle Royale</p>
+    <div>
+      <button id="btn-quick" class="btn">Quick Match</button>
+      <button id="btn-create" class="btn">Create Room</button>
+      <input id="join-code" placeholder="Room code" />
+      <button id="btn-join" class="btn">Join</button>
+    </div>
+  </div>
+
+  <!-- Waiting room -->
+  <div id="s-waiting">
+    <h2>Waiting Room</h2>
+    <div id="room-code-display"></div>
+    <div id="player-slots-grid"></div>
+    <div id="wait-chat-wrap">
+      <input id="wait-chat-input" placeholder="Say something..." />
+      <button id="wait-chat-send" class="btn">Send</button>
+    </div>
+    <button id="btn-start" class="btn">Start</button>
+    <button id="btn-leave" class="btn">Leave</button>
+    <button id="btn-copy-link" class="btn">Copy Invite</button>
+  </div>
+
+  <!-- Game screen -->
+  <div id="s-game">
+    <canvas id="game-canvas"></canvas>
+    <canvas id="minimap-canvas" style="position:fixed;right:10px;top:10px;width:170px;height:110px;"></canvas>
+
+    <!-- hud -->
+    <div id="hud">
+      <div id="countdown"><span id="countdown-num"></span></div>
+      <div id="abilities">
+        <button id="ab-pulse-btn" class="btn">Pulse</button>
+        <button id="ab-shield-btn" class="btn">Shield</button>
+        <button id="ab-surge-btn" class="btn">Surge</button>
+      </div>
+
+      <div id="chat-input-wrap">
+        <textarea id="chat-game-input" rows="1" placeholder="Chat..."></textarea>
+        <button id="chat-send-btn" class="btn">Send</button>
+        <button id="chat-toggle-btn" class="btn">Toggle</button>
+      </div>
+      <button id="mute-btn" class="btn">Voice</button>
+      <button id="btn-leave2" class="btn">Leave</button>
+    </div>
+
+    <!-- mobile controls -->
+    <div id="mobile-controls">
+      <div id="joystick-outer" style="position:fixed;left:12px;bottom:12px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,0.02)"></div>
+      <div id="joystick-inner" style="position:fixed;left:12px;bottom:12px;width:28px;height:28px;border-radius:50%;transform:translate(-50%,-50%);"></div>
+      <button id="mb-pulse" class="btn">Q</button>
+      <button id="mb-shield" class="btn">E</button>
+      <button id="mb-surge" class="btn">R</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="s-results">
+    <h2>Results</h2>
+    <div id="winner-name"></div>
+    <div id="results-rows"></div>
+    <button id="btn-play-again" class="btn">Play Again</button>
+    <button id="btn-menu-from-results" class="btn">Menu</button>
+    <button id="share-score-btn" class="btn">Share</button>
+  </div>
+
+  <!-- Minimal chat UI used elsewhere -->
+  <div style="display:none">
+    <input id="chat-game-input" />
+    <button id="chat-send-btn">Send</button>
+  </div>
+
+  <!-- Firebase compat SDKs — must load before your module script -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <!-- Your modular app -->
+  <script type="module" src="./game.js"></script>
+</body>
+</html>
